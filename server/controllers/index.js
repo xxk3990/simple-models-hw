@@ -353,12 +353,12 @@ const searchDogName = (req, res) => {
         error: 'No Dogs found :(',
       });
     }
-
+    lastAddedDog.age += 1; //update age if they search
     // if a match, send the match back
     return res.json({
       name: doc.name,
       breed: doc.breed,
-      age: doc.age,
+      age: lastAddedDog.age
     });
   });
 };
