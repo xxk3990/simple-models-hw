@@ -13,7 +13,7 @@ const defaultCatData = {
 const defaultDogData = {
   name: 'unknown dog name',
   breed: 'unknown',
-  age: 1
+  age: 1,
 };
 
 // object for us to keep track of the last Cat we made and dynamically update it sometimes
@@ -55,8 +55,7 @@ const readAllCats = (req, res, callback) => {
 
 const readAllDogs = (req, res, callback) => {
   Dog.find(callback).lean();
-}
-
+};
 
 // function to find a specific cat on request.
 // Express functions always receive the request and the response.
@@ -68,7 +67,7 @@ const readCat = (req, res) => {
   const callback = (err, doc) => {
     if (err) {
       return res.status(500).json({
-        err
+        err,
       }); // if error, return it
     }
 
@@ -92,7 +91,7 @@ const readDog = (req, res) => {
   const callback = (err, doc) => {
     if (err) {
       return res.status(500).json({
-        err
+        err,
       }); // if error, return it
     }
 
@@ -117,13 +116,13 @@ const hostPage1 = (req, res) => {
   const callback = (err, docs) => {
     if (err) {
       return res.status(500).json({
-        err
+        err,
       }); // if error, return it
     }
 
     // return success
     return res.render('page1', {
-      cats: docs
+      cats: docs,
     });
   };
 
@@ -161,13 +160,13 @@ const hostPage4 = (req, res) => {
   const callback = (err, docs) => {
     if (err) {
       return res.status(500).json({
-        err
+        err,
       }); // if error, return it
     }
 
     // return success
     return res.render('page4', {
-      dogs: docs
+      dogs: docs,
     });
   };
 
@@ -182,13 +181,13 @@ const getName = (req, res) => {
   // Since this sends back the data through HTTP
   // you can't send any more data to this user until the next response
   res.json({
-    name: lastAddedCat.name
+    name: lastAddedCat.name,
   });
 };
 
 const getDogName = (req, res) => {
   res.json({
-    name: lastAddedDog.name
+    name: lastAddedDog.name,
   });
 };
 
@@ -205,7 +204,7 @@ const setName = (req, res) => {
     // if not respond with a 400 error
     // (either through json or a web page depending on the client dev)
     return res.status(400).json({
-      error: 'firstname,lastname and beds are all required'
+      error: 'firstname,lastname and beds are all required',
     });
   }
 
@@ -231,13 +230,13 @@ const setName = (req, res) => {
     // return success
     res.json({
       name: lastAddedCat.name,
-      beds: lastAddedCat.bedsOwned
+      beds: lastAddedCat.bedsOwned,
     });
   });
 
   // if error, return it
   savePromise.catch((err) => res.status(500).json({
-    err
+    err,
   }));
 
   return res;
@@ -245,12 +244,12 @@ const setName = (req, res) => {
 const setDogName = (req, res) => {
   if (!req.body.name || !req.body.age || !req.body.breed) {
     return res.status(400).json({
-      error: 'Name, age, and breed are all required'
+      error: 'Name, age, and breed are all required',
     });
   }
 
   // if required fields are good, then set name
-  const name = `${req.body.name}`
+  const name = `${req.body.name}`;
 
   // dummy JSON to insert into database
   const dogData = {
@@ -279,12 +278,11 @@ const setDogName = (req, res) => {
 
   // if error, return it
   savePromise.catch((err) => res.status(500).json({
-    err
+    err,
   }));
 
   return res;
-}
-
+};
 
 // function to handle requests search for a name and return the object
 // controller functions in Express receive the full HTTP request
@@ -299,7 +297,7 @@ const searchName = (req, res) => {
   // POSTS send data to add while GETS query for a page or data (such as a search)
   if (!req.query.name) {
     return res.status(400).json({
-      error: 'Name is required to perform a search'
+      error: 'Name is required to perform a search',
     });
   }
 
@@ -314,7 +312,7 @@ const searchName = (req, res) => {
     // errs, handle them
     if (err) {
       return res.status(500).json({
-        err
+        err,
       }); // if error, return it
     }
 
@@ -322,31 +320,29 @@ const searchName = (req, res) => {
     // (does not necessarily have to be an error since technically it worked correctly)
     if (!doc) {
       return res.json({
-        error: 'No cats found'
+        error: 'No cats found',
       });
     }
 
     // if a match, send the match back
     return res.json({
       name: doc.name,
-      beds: doc.bedsOwned
+      beds: doc.bedsOwned,
     });
   });
 };
 
-
-
 const searchDogName = (req, res) => {
   if (!req.query.name) {
     return res.status(400).json({
-      error: 'Name is required to perform a search'
+      error: 'Name is required to perform a search',
     });
   }
   return Dog.findDogByName(req.query.name, (err, doc) => {
     // errs, handle them
     if (err) {
       return res.status(500).json({
-        err
+        err,
       }); // if error, return it
     }
 
@@ -354,7 +350,7 @@ const searchDogName = (req, res) => {
     // (does not necessarily have to be an error since technically it worked correctly)
     if (!doc) {
       return res.json({
-        error: 'No Dogs found :('
+        error: 'No Dogs found :(',
       });
     }
 
@@ -366,9 +362,6 @@ const searchDogName = (req, res) => {
     });
   });
 };
-
-
-
 
 // function to handle a request to update the last added object
 // this PURELY exists to show you how to update a model object
@@ -392,11 +385,11 @@ const updateLast = (req, res) => {
   // send back the name as a success for now
   savePromise.then(() => res.json({
     name: lastAddedCat.name,
-    beds: lastAddedCat.bedsOwned
+    beds: lastAddedCat.bedsOwned,
   }));
 
   // if save error, just return an error for now
-  savePromise.catch((err) => res.status(500).json({err}));
+  savePromise.catch((err) => res.status(500).json({ err }));
 };
 
 const updateLastDog = (req, res) => {
@@ -407,8 +400,8 @@ const updateLastDog = (req, res) => {
     breed: lastAddedDog.breed,
     age: lastAddedDog.age,
   }));
-  savePromise.catch((err) => res.status(500).json({err}));
-}
+  savePromise.catch((err) => res.status(500).json({ err }));
+};
 
 // function to handle a request to any non-real resources (404)
 // controller functions in Express receive the full HTTP request
