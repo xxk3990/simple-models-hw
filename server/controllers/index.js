@@ -253,7 +253,7 @@ const setDogName = (req, res) => {
 
   // dummy JSON to insert into database
   const dogData = {
-    name: name,
+    name,
     breed: req.body.breed,
     age: req.body.age,
   };
@@ -269,7 +269,7 @@ const setDogName = (req, res) => {
     // This way we can update it dynamically
     // return success
     res.json({
-      name: name,
+      name,
       breed: req.body.breed,
       age: req.body.age,
     });
@@ -355,15 +355,11 @@ const searchDogName = (req, res) => {
     doc.age++;
     const save = doc.save(doc);
 
-    save.then(() => res.json({
+    return save.then(() => res.json({
       name: doc.name,
       breed: doc.breed,
       age: doc.age,
     }));
-    save.catch(() => res.status(500).json({
-      err,
-    }));
-    return doc;
   });
 };
 
